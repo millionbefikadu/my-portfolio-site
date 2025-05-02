@@ -11,12 +11,10 @@ const gptResolvers = require('./resolvers/millionGPTResolver');
 
 const app = express();
 
-// ✅ Allow only Netlify frontend
 const allowedOrigins = ['https://millioneshetu.netlify.app'];
 
-const corsOptions = {
+app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like curl or Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -24,9 +22,7 @@ const corsOptions = {
     }
   },
   credentials: true,
-};
-
-app.use(cors(corsOptions));
+}));
 // ✅ Connect MongoDB
 connectDB();
 
