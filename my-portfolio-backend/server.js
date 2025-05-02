@@ -9,16 +9,22 @@ const typeDefs = require('./schema/typeDefs');
 const contactResolvers = require('./resolvers/contactResolvers');
 const gptResolvers = require('./resolvers/millionGPTResolver');
 
-// ✅ Initialize Express
 const app = express();
 
-// ✅ CORS config to allow frontend domain (Netlify)
+// ✅ CORS for Netlify Frontend
+const allowedOrigins = ['https://millioneshetu.netlify.app'];
 app.use(cors({
-  origin: 'https://millioneshetu.netlify.app', // Netlify frontend
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 
-// ✅ Connect to MongoDB
+// ✅ Connect MongoDB
 connectDB();
 
 // ✅ Combine resolvers
@@ -33,32 +39,32 @@ const combinedResolvers = {
   },
 };
 
-// ✅ Apollo Server setup
-async function startServer() {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers: combinedResolvers,
-    context: ({ req }) => {
-      const token = req.headers.authorization || "";
-      try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-        return { user };
-      } catch {
-        return {}; // allow unauthenticated access
-      }
-    },
-    introspection: true,
-    playground: true,
-  });
+// ✅ Apollo Server with context
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: combinedResolvers,
+  context: ({ req }) => {
+    const token = req.headers.authorization || "";
+    try {
+      const user = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+      return { user };
+    } catch {
+      return {};
+    }
+  },
+  introspection: true,
+  playground: true,
+});
 
+// ✅ Start the server
+async function startServer() {
   await server.start();
   server.applyMiddleware({ app, path: '/graphql' });
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`🚀 Server running at http://localhost:${PORT}${server.graphqlPath}`);
   });
 }
 
-// ✅ Start the server
 startServer();

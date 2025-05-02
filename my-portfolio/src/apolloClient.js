@@ -2,7 +2,8 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri: 'https://my-portfolio-site-ohgx.onrender.com/graphql', // ✅ your deployed backend URL
+  uri: 'https://my-portfolio-site-ohgx.onrender.com/graphql', // ✅ Deployed backend
+  credentials: 'include', // ✅ Important for cookies if needed
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -10,7 +11,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `${token}` : "",
+      Authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
