@@ -1,0 +1,89 @@
+.navbar {
+  background-color: #1f1f1f;
+  color: white;
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Navigation links */
+.navbar-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.navbar-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar-links li a:hover,
+.navbar-links li a.active {
+  color: #4dabf7;
+  text-decoration: underline;
+}
+
+/* Hamburger Icon */
+.navbar-toggle {
+  display: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #1f1f1f;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    display: none;
+    animation: slideDown 0.3s ease-in-out forwards;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+}
+
+/* Animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.social-icons a {
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #0d6efd; /* Bootstrap blue */
+}

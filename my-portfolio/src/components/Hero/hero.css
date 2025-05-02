@@ -1,0 +1,93 @@
+/* Full-Screen Hero Section */
+.hero {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Radial Glow Effect */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 60%);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1.2s ease-in-out both;
+}
+
+/* Profile Picture */
+.hero-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid #f1f5f9;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  margin-bottom: 25px;
+}
+
+/* Hero Heading */
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #e2e8f0;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* ✅ Shadow */
+}
+
+/* Hero Paragraph */
+.hero-content p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  line-height: 1.6;
+  margin: 0 auto;
+  color: #cbd5e1;
+}
+
+.hero-content p::before {
+  content: "💻 ";
+  font-size: 1.3rem;
+  margin-right: 4px;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+}
