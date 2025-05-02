@@ -10,7 +10,10 @@ const contactResolvers = require('./resolvers/contactResolvers');
 const gptResolvers = require('./resolvers/millionGPTResolver');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://millioneshetu.netlify.app', // ✅ allow only this frontend
+  credentials: true
+}));
 
 // ✅ Connect to MongoDB
 connectDB();
