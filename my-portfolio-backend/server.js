@@ -9,9 +9,12 @@ const typeDefs = require('./schema/typeDefs');
 const contactResolvers = require('./resolvers/contactResolvers');
 const gptResolvers = require('./resolvers/millionGPTResolver');
 
+// ✅ Initialize Express
 const app = express();
+
+// ✅ CORS config to allow frontend domain (Netlify)
 app.use(cors({
-  origin: 'https://millioneshetu.netlify.app', // ✅ allow only this frontend
+  origin: 'https://millioneshetu.netlify.app', // Netlify frontend
   credentials: true
 }));
 
@@ -22,33 +25,32 @@ connectDB();
 const combinedResolvers = {
   Query: {
     ...contactResolvers.Query,
-    ...gptResolvers.Query, // <- this must include askMillionGPT
+    ...gptResolvers.Query,
   },
   Mutation: {
     ...contactResolvers.Mutation,
-    ...(gptResolvers.Mutation || {}), // support optional Mutation
+    ...(gptResolvers.Mutation || {}),
   },
 };
 
-// ✅ Apollo Server setup with context
-const server = new ApolloServer({
-  typeDefs,
-  resolvers: combinedResolvers,
-  context: ({ req }) => {
-    const token = req.headers.authorization || "";
-    try {
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-      return { user };
-    } catch {
-      return {}; // no auth
-    }
-  },
-  introspection: true,
-  playground: true,
-});
-
-// ✅ Start Server
+// ✅ Apollo Server setup
 async function startServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers: combinedResolvers,
+    context: ({ req }) => {
+      const token = req.headers.authorization || "";
+      try {
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+        return { user };
+      } catch {
+        return {}; // allow unauthenticated access
+      }
+    },
+    introspection: true,
+    playground: true,
+  });
+
   await server.start();
   server.applyMiddleware({ app, path: '/graphql' });
 
@@ -58,4 +60,5 @@ async function startServer() {
   });
 }
 
+// ✅ Start the server
 startServer();
