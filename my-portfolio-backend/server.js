@@ -11,17 +11,17 @@ const gptResolvers = require('./resolvers/millionGPTResolver');
 
 const app = express();
 
-// ✅ CORS setup — allows only your Netlify frontend
+// ✅ Apply CORS
 app.use(cors({
   origin: 'https://millioneshetu.netlify.app',
   credentials: true,
 }));
 
-// ✅ Connect to MongoDB
+// ✅ Connect DB
 connectDB();
 
-// ✅ Merge resolvers
-const combinedResolvers = {
+// ✅ Combine resolvers
+const resolvers = {
   Query: {
     ...contactResolvers.Query,
     ...gptResolvers.Query,
@@ -32,10 +32,10 @@ const combinedResolvers = {
   },
 };
 
-// ✅ Apollo Server setup with context (auth support)
+// ✅ Apollo Server
 const server = new ApolloServer({
   typeDefs,
-  resolvers: combinedResolvers,
+  resolvers,
   context: ({ req }) => {
     const token = req.headers.authorization || "";
     try {
@@ -49,10 +49,14 @@ const server = new ApolloServer({
   playground: true,
 });
 
-// ✅ Start the Apollo + Express server
+// ✅ Apply Apollo Middleware
 async function startServer() {
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql' });
+  server.applyMiddleware({
+    app,
+    path: '/graphql',
+    cors: false, // Important!
+  });
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
