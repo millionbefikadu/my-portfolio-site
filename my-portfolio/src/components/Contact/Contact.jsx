@@ -19,7 +19,10 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addMessage({ variables: form });
+                 const { data } = await addMessage({ variables: form });
+                 console.log("Contact saved:", data); // Debug
+                 if (data) setSuccess(true);
+
       setSuccess(true);
       setForm({ name: '', email: '', message: '' });
 
