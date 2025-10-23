@@ -58,6 +58,9 @@ async function startServer() {
     cors: false, // Important!
   });
 
+   // ✅ Add this line
+  app.get("/health", (_req, res) => res.send("ok"));
+
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}${server.graphqlPath}`);
