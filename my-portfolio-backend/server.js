@@ -31,7 +31,9 @@ const resolvers = {
     ...(gptResolvers.Mutation || {}),
   },
 };
-
+   // ✅ Add this line
+  app.get("/health", (_req, res) => res.send("ok"));
+  
 // ✅ Apollo Server
 const server = new ApolloServer({
   typeDefs,
@@ -58,8 +60,7 @@ async function startServer() {
     cors: false, // Important!
   });
 
-   // ✅ Add this line
-  app.get("/health", (_req, res) => res.send("ok"));
+  
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
