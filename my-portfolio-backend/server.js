@@ -31,8 +31,7 @@ const resolvers = {
     ...(gptResolvers.Mutation || {}),
   },
 };
-   // ✅ Add this line
-  app.get("/health", (_req, res) => res.send("ok"));
+   
   
 // ✅ Apollo Server
 const server = new ApolloServer({
@@ -53,6 +52,8 @@ const server = new ApolloServer({
 
 // ✅ Apply Apollo Middleware
 async function startServer() {
+
+  app.get("/health", (_req, res) => res.send("ok"));
   await server.start();
   server.applyMiddleware({
     app,
