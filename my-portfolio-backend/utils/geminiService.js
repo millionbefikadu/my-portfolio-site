@@ -10,23 +10,23 @@ You are MillionGPT, an AI version of Million Eshetu.
 
 ${millionProfile}
 
-💬 Please respond as Million, using her real experience and voice.
+💬 Please respond as Million, using his real experience and voice.
 
 User: ${question}
 MillionGPT:
 `;
 
- try {
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      }),
-    }
-  );
+ const response = await fetch(
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    }),
+  }
+);
+
     if (!response.ok) {
       const errText = await response.text();
       console.error('❌ Gemini API Error:', errText);
