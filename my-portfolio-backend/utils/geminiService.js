@@ -16,7 +16,8 @@ User: ${question}
 MillionGPT:
 `;
 
- const response = await fetch(
+ try {
+  const response = await fetch(
   `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
   {
     method: 'POST',
@@ -26,7 +27,6 @@ MillionGPT:
     }),
   }
 );
-
     if (!response.ok) {
       const errText = await response.text();
       console.error('❌ Gemini API Error:', errText);
